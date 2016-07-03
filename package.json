@@ -1,0 +1,29 @@
+{
+  "name": "YouCanLearnAnything",
+  "author": "Jenn Creighton",
+  "repository": "https://github.com/jcreighton/you-can-learn-anything",
+  "scripts": {
+    "build": "webpack --watch",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.14.0",
+    "react": "^15.1.0",
+    "react-addons-css-transition-group": "^15.1.0",
+    "react-codemirror": "^0.2.6",
+    "react-dom": "^15.1.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.9.1",
+    "babel-loader": "^6.2.4",
+    "babel-preset-es2015": "^6.9.0",
+    "babel-preset-react": "^6.5.0",
+    "karma": "^1.1.0",
+    "karma-chrome-launcher": "^1.0.1",
+    "karma-mocha": "^1.1.1",
+    "karma-sourcemap-loader": "^0.3.7",
+    "karma-webpack": "^1.7.0",
+    "mocha": "^2.5.3",
+    "webpack": "^1.13.1"
+  }
+}
