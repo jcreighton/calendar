@@ -56,8 +56,8 @@
 	var React = __webpack_require__(2);
 	var ReactDOM = __webpack_require__(33);
 
-	var Calendar = __webpack_require__(171);
-	var Component = __webpack_require__(170);
+	var Calendar = __webpack_require__(170);
+	var Component = __webpack_require__(175);
 
 	var App = React.createClass({
 	  displayName: 'App',
@@ -20815,30 +20815,7 @@
 	'use strict';
 
 	var React = __webpack_require__(2);
-	var styles = __webpack_require__(172);
-
-	var Component = React.createClass({
-	  displayName: 'Component',
-
-	  render: function render() {
-	    return React.createElement(
-	      'h2',
-	      { className: styles.h2 },
-	      'HEADER'
-	    );
-	  }
-	});
-
-	module.exports = Component;
-
-/***/ },
-/* 171 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var React = __webpack_require__(2);
-	var styles = __webpack_require__(176);
+	var styles = __webpack_require__(171);
 
 	var Calendar = React.createClass({
 	  displayName: 'Calendar',
@@ -20903,23 +20880,23 @@
 	module.exports = Calendar;
 
 /***/ },
-/* 172 */
+/* 171 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(173);
+	var content = __webpack_require__(172);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(175)(content, {});
+	var update = __webpack_require__(174)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!./component.css", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!./component.css");
+			module.hot.accept("!!./../../../node_modules/css-loader/index.js?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!./calendar.css", function() {
+				var newContent = require("!!./../../../node_modules/css-loader/index.js?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!./calendar.css");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -20929,23 +20906,29 @@
 	}
 
 /***/ },
-/* 173 */
+/* 172 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(174)();
+	exports = module.exports = __webpack_require__(173)();
 	// imports
 
 
 	// module
-	exports.push([module.id, ".component__h2___3lWjw {\n  font-family: monospace;\n  font-size: 16px;\n  color: tomato;\n}", ""]);
+	exports.push([module.id, ".calendar__calendar___3EFYz {\n  display: flex;\n  width: 1200px;\n  flex-direction: column;\n  font-family: 'Questrial', sans-serif;\n  // text-transform: uppercase;\n}\n\n.calendar__header___2iWp3 tr {\n  display: flex;\n  margin-top: 8px;\n  margin-left: 84px;\n  margin-bottom: 8px;\n}\n\n.calendar__header___2iWp3 th {\n  flex: 0 0 180px;\n  font-size: 16px;\n  color: #535354;\n  text-align: center;\n  border: 2px solid white;\n}\n\n.calendar__body___35rHU tr {\n  display: flex;\n}\n\n.calendar__hours___2bq0o {\n  display: flex;\n  flex-direction: column;\n  color: #535354;\n  border-right: 4px solid white;\n}\n\n.calendar__hour___3mEKJ {\n  width: 80px;\n  height: 40px;\n  font-size: 12px;\n  text-align: end;\n  margin-bottom: 4px;\n  border-bottom: 2px solid tomato;\n}\n\n.calendar__hour___3mEKJ:first-child {\n  margin-top: 4px;\n}\n\n.calendar__hour___3mEKJ:last-child {\n  margin-bottom: 0px;\n}\n\n.calendar__day___1Y_ii {\n  position: relative;\n  flex: 0 0 180px;\n  background-color: #eeeeee;\n  background-image: linear-gradient(transparent 50%, rgba(255,255,255,.5) 50%);\n  background-size: 46px 46px;\n  border-right: 4px solid white;\n}\n\n.calendar__event___3n5fK {\n  position: absolute;\n  left: 0;\n  width: 170px;\n  height: 46px;\n  background-color: tomato;\n}", ""]);
 
 	// exports
 	exports.locals = {
-		"h2": "component__h2___3lWjw"
+		"calendar": "calendar__calendar___3EFYz",
+		"header": "calendar__header___2iWp3",
+		"body": "calendar__body___35rHU",
+		"hours": "calendar__hours___2bq0o",
+		"hour": "calendar__hour___3mEKJ",
+		"day": "calendar__day___1Y_ii",
+		"event": "calendar__event___3n5fK"
 	};
 
 /***/ },
-/* 174 */
+/* 173 */
 /***/ function(module, exports) {
 
 	/*
@@ -21001,7 +20984,7 @@
 
 
 /***/ },
-/* 175 */
+/* 174 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -21253,6 +21236,29 @@
 
 
 /***/ },
+/* 175 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(2);
+	var styles = __webpack_require__(176);
+
+	var Component = React.createClass({
+	  displayName: 'Component',
+
+	  render: function render() {
+	    return React.createElement(
+	      'h2',
+	      { className: styles.h2 },
+	      'HEADER'
+	    );
+	  }
+	});
+
+	module.exports = Component;
+
+/***/ },
 /* 176 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -21262,14 +21268,14 @@
 	var content = __webpack_require__(177);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(175)(content, {});
+	var update = __webpack_require__(174)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!./calendar.css", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!./calendar.css");
+			module.hot.accept("!!./../../../node_modules/css-loader/index.js?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!./component.css", function() {
+				var newContent = require("!!./../../../node_modules/css-loader/index.js?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!./component.css");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -21282,22 +21288,16 @@
 /* 177 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(174)();
+	exports = module.exports = __webpack_require__(173)();
 	// imports
 
 
 	// module
-	exports.push([module.id, ".calendar__calendar___3EFYz {\n  display: flex;\n  width: 1200px;\n  flex-direction: column;\n  font-family: 'Questrial', sans-serif;\n}\n\n.calendar__header___2iWp3 tr {\n  display: flex;\n  margin-top: 8px;\n  margin-left: 84px;\n  margin-bottom: 8px;\n}\n\n.calendar__header___2iWp3 th {\n  flex: 0 0 180px;\n  font-size: 16px;\n  color: #535354;\n  text-align: center;\n  border: 2px solid white;\n}\n\n.calendar__body___35rHU tr {\n  display: flex;\n}\n\n.calendar__hours___2bq0o {\n  display: flex;\n  flex-direction: column;\n  color: #535354;\n  border-right: 4px solid white;\n}\n\n.calendar__hour___3mEKJ {\n  width: 80px;\n  height: 40px;\n  font-size: 12px;\n  text-align: end;\n  margin-bottom: 4px;\n  border-bottom: 2px solid tomato;\n}\n\n.calendar__hour___3mEKJ:first-child {\n  margin-top: 4px;\n}\n\n.calendar__hour___3mEKJ:last-child {\n  margin-bottom: 0px;\n}\n\n.calendar__day___1Y_ii {\n  position: relative;\n  flex: 0 0 180px;\n  background-color: tomato;\n  background-image: linear-gradient(transparent 50%, rgba(255,255,255,.2) 50%);\n  background-size: 46px 46px;\n  border-right: 4px solid white;\n}\n\n.calendar__event___3n5fK {\n  position: absolute;\n  left: 0;\n  width: 170px;\n  height: 46px;\n  background-color: #f5f5f5;\n}", ""]);
+	exports.push([module.id, ".component__h2___3lWjw {\n  font-family: monospace;\n  font-size: 16px;\n  color: tomato;\n}", ""]);
 
 	// exports
 	exports.locals = {
-		"calendar": "calendar__calendar___3EFYz",
-		"header": "calendar__header___2iWp3",
-		"body": "calendar__body___35rHU",
-		"hours": "calendar__hours___2bq0o",
-		"hour": "calendar__hour___3mEKJ",
-		"day": "calendar__day___1Y_ii",
-		"event": "calendar__event___3n5fK"
+		"h2": "component__h2___3lWjw"
 	};
 
 /***/ }
