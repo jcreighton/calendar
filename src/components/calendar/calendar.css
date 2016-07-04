@@ -64,4 +64,5 @@
   width: 170px;
   height: 46px;
   background-color: tomato;
+  box-shadow: inset 1px 1px #cc2406, inset -1px -1px #cc2406;
 }
