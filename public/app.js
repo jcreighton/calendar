@@ -56,17 +56,30 @@
 	var React = __webpack_require__(2);
 	var ReactDOM = __webpack_require__(33);
 
+	var Calendar = __webpack_require__(171);
 	var Component = __webpack_require__(170);
 
 	var App = React.createClass({
 	  displayName: 'App',
 
+	  getInitialState: function getInitialState() {
+	    return {
+	      events: [{
+	        name: 'engineering interview test prep',
+	        startDate: '2016-03-10T15:00:00.000Z',
+	        endDate: '2016-03-10T15:30:00.000Z'
+	      }, {
+	        name: 'OOO for dentist',
+	        startDate: '2016-03-11T10:00:00.000Z',
+	        endDate: '2016-03-11T12:00:00.000Z'
+	      }]
+	    };
+	  },
 	  render: function render() {
 	    return React.createElement(
 	      'div',
 	      { className: 'app' },
-	      'APP',
-	      React.createElement(Component, null)
+	      React.createElement(Calendar, { events: this.state.events })
 	    );
 	  }
 	});
@@ -20801,23 +20814,16 @@
 
 	'use strict';
 
-	var _component = __webpack_require__(171);
-
-	var _component2 = _interopRequireDefault(_component);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 	var React = __webpack_require__(2);
-
+	var styles = __webpack_require__(172);
 
 	var Component = React.createClass({
 	  displayName: 'Component',
 
 	  render: function render() {
-	    console.log('styles', _component2.default.h2);
 	    return React.createElement(
 	      'h2',
-	      { className: _component2.default.h2 },
+	      { className: styles.h2 },
 	      'HEADER'
 	    );
 	  }
@@ -20829,13 +20835,84 @@
 /* 171 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+
+	var React = __webpack_require__(2);
+	var styles = __webpack_require__(176);
+
+	var Calendar = React.createClass({
+	  displayName: 'Calendar',
+
+	  getDefaultProps: function getDefaultProps() {
+	    return {
+	      days: ['Sun 7/3', 'Mon 7/4', 'Tue 7/5', 'Wed 7/6', 'Thu 7/7', 'Fri 7/8'],
+	      hours: ['12am', '1am', '2am', '3am', '4am', '5am', '6am', '7am', '8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm', '9pm', '10pm', '11pm'],
+	      hourHeight: 46,
+	      halfHourHeight: 23
+	    };
+	  },
+	  render: function render() {
+	    return React.createElement(
+	      'table',
+	      { className: styles.calendar },
+	      React.createElement(
+	        'thead',
+	        { className: styles.header },
+	        React.createElement(
+	          'tr',
+	          null,
+	          this.props.days.map(function (day, i) {
+	            return React.createElement(
+	              'th',
+	              { key: i },
+	              day
+	            );
+	          })
+	        )
+	      ),
+	      React.createElement(
+	        'tbody',
+	        { className: styles.body },
+	        React.createElement(
+	          'tr',
+	          null,
+	          React.createElement(
+	            'td',
+	            { className: styles.hours },
+	            this.props.hours.map(function (hour, i) {
+	              return React.createElement(
+	                'div',
+	                { className: styles.hour, key: i },
+	                hour
+	              );
+	            })
+	          ),
+	          this.props.days.map(function (day, i) {
+	            return React.createElement(
+	              'td',
+	              { className: styles.day, key: i },
+	              React.createElement('div', { className: styles.event, style: { top: i * 46 + 'px' } })
+	            );
+	          })
+	        )
+	      )
+	    );
+	  }
+	});
+
+	module.exports = Calendar;
+
+/***/ },
+/* 172 */
+/***/ function(module, exports, __webpack_require__) {
+
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(172);
+	var content = __webpack_require__(173);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(174)(content, {});
+	var update = __webpack_require__(175)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -20852,10 +20929,10 @@
 	}
 
 /***/ },
-/* 172 */
+/* 173 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(173)();
+	exports = module.exports = __webpack_require__(174)();
 	// imports
 
 
@@ -20868,7 +20945,7 @@
 	};
 
 /***/ },
-/* 173 */
+/* 174 */
 /***/ function(module, exports) {
 
 	/*
@@ -20924,7 +21001,7 @@
 
 
 /***/ },
-/* 174 */
+/* 175 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -21174,6 +21251,54 @@
 			URL.revokeObjectURL(oldSrc);
 	}
 
+
+/***/ },
+/* 176 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(177);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(175)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../node_modules/css-loader/index.js?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!./calendar.css", function() {
+				var newContent = require("!!./../../../node_modules/css-loader/index.js?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!./calendar.css");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 177 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(174)();
+	// imports
+
+
+	// module
+	exports.push([module.id, ".calendar__calendar___3EFYz {\n  display: flex;\n  width: 1200px;\n  flex-direction: column;\n  font-family: 'Questrial', sans-serif;\n}\n\n.calendar__header___2iWp3 tr {\n  display: flex;\n  margin-top: 8px;\n  margin-left: 84px;\n  margin-bottom: 8px;\n}\n\n.calendar__header___2iWp3 th {\n  flex: 0 0 180px;\n  font-size: 16px;\n  color: #535354;\n  text-align: center;\n  border: 2px solid white;\n}\n\n.calendar__body___35rHU tr {\n  display: flex;\n}\n\n.calendar__hours___2bq0o {\n  display: flex;\n  flex-direction: column;\n  color: #535354;\n  border-right: 4px solid white;\n}\n\n.calendar__hour___3mEKJ {\n  width: 80px;\n  height: 40px;\n  font-size: 12px;\n  text-align: end;\n  margin-bottom: 4px;\n  border-bottom: 2px solid tomato;\n}\n\n.calendar__hour___3mEKJ:first-child {\n  margin-top: 4px;\n}\n\n.calendar__hour___3mEKJ:last-child {\n  margin-bottom: 0px;\n}\n\n.calendar__day___1Y_ii {\n  position: relative;\n  flex: 0 0 180px;\n  background-color: tomato;\n  background-image: linear-gradient(transparent 50%, rgba(255,255,255,.2) 50%);\n  background-size: 46px 46px;\n  border-right: 4px solid white;\n}\n\n.calendar__event___3n5fK {\n  position: absolute;\n  left: 0;\n  width: 170px;\n  height: 46px;\n  background-color: #f5f5f5;\n}", ""]);
+
+	// exports
+	exports.locals = {
+		"calendar": "calendar__calendar___3EFYz",
+		"header": "calendar__header___2iWp3",
+		"body": "calendar__body___35rHU",
+		"hours": "calendar__hours___2bq0o",
+		"hour": "calendar__hour___3mEKJ",
+		"day": "calendar__day___1Y_ii",
+		"event": "calendar__event___3n5fK"
+	};
 
 /***/ }
 /******/ ]);

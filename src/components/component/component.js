@@ -1,9 +1,8 @@
 var React = require('react');
-import styles from './component.css';
+var styles = require('./component.css');
 
 var Component = React.createClass({
   render: function() { 
-    console.log('styles', styles.h2);
     return (
       <h2 className={styles.h2}>
         HEADER
