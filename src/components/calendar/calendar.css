@@ -38,7 +38,7 @@
   font-size: 12px;
   text-align: end;
   margin-bottom: 4px;
-  border-bottom: 2px solid tomato;
+  border-bottom: 2px solid #ff6347;
 }
 
 .hour:first-child {
@@ -53,16 +53,7 @@
   position: relative;
   flex: 0 0 180px;
   background-color: #eeeeee;
-  background-image: linear-gradient(transparent 50%, rgba(255,255,255,.5) 50%);
+  background-image: linear-gradient(transparent 50%, rgba(255, 255, 255, .5) 50%);
   background-size: 46px 46px;
   border-right: 4px solid white;
-}
-
-.event {
-  position: absolute;
-  left: 0;
-  width: 170px;
-  height: 46px;
-  background-color: tomato;
-  box-shadow: inset 1px 1px #cc2406, inset -1px -1px #cc2406;
 }

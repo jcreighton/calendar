@@ -1,4 +1,7 @@
+var moment = require('moment');
 var React = require('react');
+
+var Event = require('../event/event');
 var styles = require('./calendar.css');
 
 var Calendar = React.createClass({
@@ -11,6 +14,28 @@ var Calendar = React.createClass({
       hourHeight: 46,
       halfHourHeight: 23
     }
+  },
+  componentWillMount: function() {
+    var mapped = this.props.events.map((event) => { 
+      var start = moment(event.startDate);
+      var end = moment(event.endDate);
+      return { 
+        title: event.name,
+        duration: end.diff(start, 'minutes')
+      }; 
+    });
+    console.log(mapped);
+
+    // {
+    //   'date': [
+    //     {
+    //       start: '',
+    //       end: '',
+    //       duration: '',
+    //       title: ''
+    //     }
+    //   ] 
+    // }
   },
   render: function() { 
     return (
@@ -26,7 +51,7 @@ var Calendar = React.createClass({
             {this.props.days.map((day, i) => {
               return (
                 <td className={styles.day} key={i}>
-                  <div className={styles.event} style={{top: (i * 46) + 'px'}}></div>
+                  <Event top={day.top + 'px'} height={46 + 'px'} />
                 </td>
               );
             })}
