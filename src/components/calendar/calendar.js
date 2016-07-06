@@ -46,8 +46,8 @@ var Calendar = React.createClass({
         events[date].push({ 
         title: event.name,
         date,
-        startTime: start.format('HH:mmA'),
-        endTime: end.format('HH:mmA'),
+        start: start.format('H:mma'),
+        end: end.format('H:mma'),
         duration,
         height: ((duration / 30) * (this.props.height / 2)),
         top: (hour * this.props.height)

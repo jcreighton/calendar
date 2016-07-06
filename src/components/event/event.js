@@ -10,8 +10,8 @@ var Calendar = React.createClass({
       width: '170',
       height: '46',
       title: 'event',
-      start: '12p',
-      end: '1p'
+      start: '12pm',
+      end: '1pm'
     }
   },
   render: function() { 
