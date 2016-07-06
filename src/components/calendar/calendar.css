@@ -1,9 +1,8 @@
 .calendar {
   display: flex;
-  width: 1200px;
+  width: 1386px;
   flex-direction: column;
   font-family: 'Questrial', sans-serif;
-  // text-transform: uppercase;
 }
 
 .header tr {
