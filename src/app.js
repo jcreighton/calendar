@@ -34,7 +34,7 @@ var App = React.createClass({
         },
         {
           name: 'binge watch OINTB',
-          startDate: '2016-07-07T06:00:00.000Z',
+          startDate: '2016-07-07T06:30:00.000Z',
           endDate: '2016-07-07T18:00:00.000Z'
         },
         {
@@ -49,6 +49,9 @@ var App = React.createClass({
         }
       ]
     }
+  },
+  componentDidMount: function() {
+    // Make fake API call
   },
   render: function() { 
     return (

@@ -85,7 +85,7 @@
 	        endDate: '2016-07-02T15:00:00.000Z'
 	      }, {
 	        name: 'binge watch OINTB',
-	        startDate: '2016-07-07T06:00:00.000Z',
+	        startDate: '2016-07-07T06:30:00.000Z',
 	        endDate: '2016-07-07T18:00:00.000Z'
 	      }, {
 	        name: 'stand in line at Shake Shack',
@@ -97,6 +97,9 @@
 	        endDate: '2016-07-09T15:30:00.000Z'
 	      }]
 	    };
+	  },
+	  componentDidMount: function componentDidMount() {
+	    // Make fake API call
 	  },
 	  render: function render() {
 	    return React.createElement(
@@ -20880,7 +20883,14 @@
 	      var end = moment(event.endDate);
 	      var duration = end.diff(start, 'minutes');
 	      var date = start.format('ddd M/D');
-	      var hour = start.format('HH');
+
+	      // Determine height based on duration of event
+	      var height = duration / 30 * (_this.props.height / 2);
+
+	      // Determine top position based on hour + minutes
+	      var hour = parseInt(start.format('HH'), 10);
+	      var minutes = start.format('mm') === '30' ? .5 : 0;
+	      var top = (hour + minutes) * _this.props.height;
 
 	      if (!events[date]) {
 	        events[date] = [];
@@ -20892,8 +20902,8 @@
 	        start: start.format('H:mma'),
 	        end: end.format('H:mma'),
 	        duration: duration,
-	        height: duration / 30 * (_this.props.height / 2),
-	        top: hour * _this.props.height
+	        height: height,
+	        top: top
 	      });
 	    });
 
@@ -35046,7 +35056,7 @@
 
 	    var event = classnames(styles.event, _defineProperty({}, styles.half, height < 46));
 
-	    console.log(event, height);
+	    console.log(event, height, top);
 
 	    return React.createElement(
 	      'div',

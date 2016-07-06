@@ -1,4 +1,5 @@
 var moment = require('moment');
+require('moment-range');
 var React = require('react');
 
 var Event = require('../event/event');
@@ -37,20 +38,27 @@ var Calendar = React.createClass({
       var end = moment(event.endDate);
       var duration = end.diff(start, 'minutes');
       var date = start.format('ddd M/D');
-      var hour = start.format('HH');
 
-        if (!events[date]) {
-          events[date] = [];
-        }
+      // Determine height based on duration of event
+      var height = (duration / 30) * (this.props.height / 2)
 
-        events[date].push({ 
+      // Determine top position based on hour + minutes
+      var hour = parseInt(start.format('HH'), 10);
+      var minutes = start.format('mm') === '30' ? .5 : 0;
+      var top = (hour + minutes) * this.props.height;
+
+      if (!events[date]) {
+        events[date] = [];
+      }
+
+      events[date].push({ 
         title: event.name,
         date,
         start: start.format('H:mma'),
         end: end.format('H:mma'),
         duration,
-        height: ((duration / 30) * (this.props.height / 2)),
-        top: (hour * this.props.height)
+        height,
+        top
       }); 
     });
 

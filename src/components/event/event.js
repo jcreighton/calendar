@@ -31,7 +31,7 @@ var Calendar = React.createClass({
       }
     );
 
-    console.log(event, height);
+    console.log(event, height, top);
 
     return (
       <div className={event} style={{
