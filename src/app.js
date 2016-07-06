@@ -8,14 +8,44 @@ var App = React.createClass({
     return {
       events: [
         {
-          name: 'engineering interview test prep',
+          name: 'deny listening to Taylor Swift',
           startDate: '2016-07-05T15:00:00.000Z',
           endDate: '2016-07-05T15:30:00.000Z'
         },
         {
-          name: 'OOO for dentist',
+          name: 'google random stuff',
+          startDate: '2016-07-05T12:00:00.000Z',
+          endDate: '2016-07-05T13:30:00.000Z'
+        },
+        {
+          name: 'write up puns',
           startDate: '2016-07-06T10:00:00.000Z',
           endDate: '2016-07-06T12:00:00.000Z'
+        },
+        {
+          name: 'Dashunds: The Long & Short of It',
+          startDate: '2016-07-06T10:30:00.000Z',
+          endDate: '2016-07-06T13:00:00.000Z'
+        },
+        {
+          name: 'dance party',
+          startDate: '2016-07-02T13:00:00.000Z',
+          endDate: '2016-07-02T15:00:00.000Z'
+        },
+        {
+          name: 'binge watch OINTB',
+          startDate: '2016-07-07T06:00:00.000Z',
+          endDate: '2016-07-07T18:00:00.000Z'
+        },
+        {
+          name: 'stand in line at Shake Shack',
+          startDate: '2016-07-04T13:00:00.000Z',
+          endDate: '2016-07-04T13:30:00.000Z'
+        },
+        {
+          name: '#blessed',
+          startDate: '2016-07-09T09:00:00.000Z',
+          endDate: '2016-07-09T15:30:00.000Z'
         }
       ]
     }

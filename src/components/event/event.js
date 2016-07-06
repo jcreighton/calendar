@@ -1,13 +1,14 @@
 var React = require('react');
+var classnames = require('classnames');
 var styles = require('./event.css');
 
 var Calendar = React.createClass({
   getDefaultProps: function() {
     return {
-      top: '0px',
-      left: '0px',
-      width: '170px',
-      height: '46px',
+      top: '0',
+      left: '0',
+      width: '170',
+      height: '46',
       title: 'event',
       start: '12p',
       end: '1p'
@@ -23,8 +24,21 @@ var Calendar = React.createClass({
       start,
       end } = this.props;
 
+    var event = classnames(
+      styles.event,
+      {
+        [styles.half]: (height < 46)
+      }
+    );
+
+    console.log(event, height);
+
     return (
-      <div className={styles.event} style={{top, left, height, width}}>
+      <div className={event} style={{
+        top: top + 'px', 
+        left: left + 'px', 
+        height: height + 'px', 
+        width: width + 'px'}}>
         <span className={styles.time}>{start}-{end}</span>
         <span className={styles.title}>{title}</span>
       </div>

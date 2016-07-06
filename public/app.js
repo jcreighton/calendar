@@ -64,13 +64,37 @@
 	  getInitialState: function getInitialState() {
 	    return {
 	      events: [{
-	        name: 'engineering interview test prep',
+	        name: 'deny listening to Taylor Swift',
 	        startDate: '2016-07-05T15:00:00.000Z',
 	        endDate: '2016-07-05T15:30:00.000Z'
 	      }, {
-	        name: 'OOO for dentist',
+	        name: 'google random stuff',
+	        startDate: '2016-07-05T12:00:00.000Z',
+	        endDate: '2016-07-05T13:30:00.000Z'
+	      }, {
+	        name: 'write up puns',
 	        startDate: '2016-07-06T10:00:00.000Z',
 	        endDate: '2016-07-06T12:00:00.000Z'
+	      }, {
+	        name: 'Dashunds: The Long & Short of It',
+	        startDate: '2016-07-06T10:30:00.000Z',
+	        endDate: '2016-07-06T13:00:00.000Z'
+	      }, {
+	        name: 'dance party',
+	        startDate: '2016-07-02T13:00:00.000Z',
+	        endDate: '2016-07-02T15:00:00.000Z'
+	      }, {
+	        name: 'binge watch OINTB',
+	        startDate: '2016-07-07T06:00:00.000Z',
+	        endDate: '2016-07-07T18:00:00.000Z'
+	      }, {
+	        name: 'stand in line at Shake Shack',
+	        startDate: '2016-07-04T13:00:00.000Z',
+	        endDate: '2016-07-04T13:30:00.000Z'
+	      }, {
+	        name: '#blessed',
+	        startDate: '2016-07-09T09:00:00.000Z',
+	        endDate: '2016-07-09T15:30:00.000Z'
 	      }]
 	    };
 	  },
@@ -20813,6 +20837,8 @@
 
 	'use strict';
 
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 	var moment = __webpack_require__(171);
 	var React = __webpack_require__(2);
 
@@ -20829,11 +20855,12 @@
 	  },
 	  getDefaultProps: function getDefaultProps() {
 	    return {
-	      fullHeight: 46,
-	      halfHeight: 23
+	      height: 46
 	    };
 	  },
 	  componentWillMount: function componentWillMount() {
+	    var _this = this;
+
 	    // Create array of days for calendar header
 	    var day;
 	    var days = [];
@@ -20851,15 +20878,23 @@
 	    this.props.events.forEach(function (event) {
 	      var start = moment(event.startDate);
 	      var end = moment(event.endDate);
+	      var duration = end.diff(start, 'minutes');
 	      var date = start.format('ddd M/D');
+	      var hour = start.format('HH');
 
-	      events[date] = {
+	      if (!events[date]) {
+	        events[date] = [];
+	      }
+
+	      events[date].push({
 	        title: event.name,
 	        date: date,
 	        startTime: start.format('HH:mmA'),
 	        endTime: end.format('HH:mmA'),
-	        duration: end.diff(start, 'minutes')
-	      };
+	        duration: duration,
+	        height: duration / 30 * (_this.props.height / 2),
+	        top: hour * _this.props.height
+	      });
 	    });
 
 	    this.setState({
@@ -20868,7 +20903,8 @@
 	    });
 	  },
 	  render: function render() {
-	    // console.log(this.state.days, this.props);
+	    var _this2 = this;
+
 	    return React.createElement(
 	      'table',
 	      { className: styles.calendar },
@@ -20896,7 +20932,7 @@
 	          React.createElement(
 	            'td',
 	            { className: styles.hours },
-	            this.props.hours.map(function (hour, i) {
+	            this.state.hours.map(function (hour, i) {
 	              return React.createElement(
 	                'div',
 	                { className: styles.hour, key: i },
@@ -20905,10 +20941,14 @@
 	            })
 	          ),
 	          this.state.days.map(function (day, i) {
+	            var events = _this2.state.events[day];
+
 	            return React.createElement(
 	              'td',
 	              { className: styles.day, key: i },
-	              React.createElement(Event, { top: day.top + 'px', height: 46 + 'px' })
+	              events && events.map(function (event, i) {
+	                return React.createElement(Event, _extends({ key: i }, event));
+	              })
 	            );
 	          })
 	        )
@@ -34973,7 +35013,10 @@
 
 	'use strict';
 
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 	var React = __webpack_require__(2);
+	var classnames = __webpack_require__(282);
 	var styles = __webpack_require__(276);
 
 	var Calendar = React.createClass({
@@ -34981,10 +35024,10 @@
 
 	  getDefaultProps: function getDefaultProps() {
 	    return {
-	      top: '0px',
-	      left: '0px',
-	      width: '170px',
-	      height: '46px',
+	      top: '0',
+	      left: '0',
+	      width: '170',
+	      height: '46',
 	      title: 'event',
 	      start: '12p',
 	      end: '1p'
@@ -35001,9 +35044,17 @@
 	    var end = _props.end;
 
 
+	    var event = classnames(styles.event, _defineProperty({}, styles.half, height < 46));
+
+	    console.log(event, height);
+
 	    return React.createElement(
 	      'div',
-	      { className: styles.event, style: { top: top, left: left, height: height, width: width } },
+	      { className: event, style: {
+	          top: top + 'px',
+	          left: left + 'px',
+	          height: height + 'px',
+	          width: width + 'px' } },
 	      React.createElement(
 	        'span',
 	        { className: styles.time },
@@ -35057,13 +35108,14 @@
 
 
 	// module
-	exports.push([module.id, ".event__event___1LP75 {\n  position: absolute;\n  display: flex;\n  flex-direction: column;\n  color: #ffffff;\n  background-color: rgba(255, 99, 71, .8);\n  box-shadow: inset 1px 1px rgba(204, 36, 6, .8), inset -1px -1px rgba(204, 36, 6, .8);\n}\n\n.event__time____zWzy {\n  font-size: 10px;\n  margin: 6px 0 2px 6px;\n}\n\n.event__title___Mw80I {\n  font-size: 13px;\n  margin-left: 6px;\n}", ""]);
+	exports.push([module.id, ".event__event___1LP75 {\n  position: absolute;\n  display: flex;\n  flex-direction: column;\n  color: #ffffff;\n  background-color: rgba(255, 99, 71, .8);\n  box-shadow: inset 1px 1px rgba(204, 36, 6, .8), inset -1px -1px rgba(204, 36, 6, .8);\n}\n\n.event__time____zWzy {\n  font-size: 10px;\n  margin: 6px 6px 2px 6px;\n}\n\n.event__title___Mw80I {\n  font-size: 13px;\n  margin: 0px 6px;\n}\n\n.event__event___1LP75.event__half___HD96J {\n  flex-direction: row;\n  align-items: center;\n}\n\n.event__half___HD96J .event__title___Mw80I {\n  width: 90%;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n\n.event__half___HD96J .event__time____zWzy {\n  margin: 0 0 0 6px;\n}", ""]);
 
 	// exports
 	exports.locals = {
 		"event": "event__event___1LP75",
 		"time": "event__time____zWzy",
-		"title": "event__title___Mw80I"
+		"title": "event__title___Mw80I",
+		"half": "event__half___HD96J"
 	};
 
 /***/ },
@@ -35420,6 +35472,60 @@
 		"hour": "calendar__hour___3mEKJ",
 		"day": "calendar__day___1Y_ii"
 	};
+
+/***/ },
+/* 282 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+	  Copyright (c) 2016 Jed Watson.
+	  Licensed under the MIT License (MIT), see
+	  http://jedwatson.github.io/classnames
+	*/
+	/* global define */
+
+	(function () {
+		'use strict';
+
+		var hasOwn = {}.hasOwnProperty;
+
+		function classNames () {
+			var classes = [];
+
+			for (var i = 0; i < arguments.length; i++) {
+				var arg = arguments[i];
+				if (!arg) continue;
+
+				var argType = typeof arg;
+
+				if (argType === 'string' || argType === 'number') {
+					classes.push(arg);
+				} else if (Array.isArray(arg)) {
+					classes.push(classNames.apply(null, arg));
+				} else if (argType === 'object') {
+					for (var key in arg) {
+						if (hasOwn.call(arg, key) && arg[key]) {
+							classes.push(key);
+						}
+					}
+				}
+			}
+
+			return classes.join(' ');
+		}
+
+		if (typeof module !== 'undefined' && module.exports) {
+			module.exports = classNames;
+		} else if (true) {
+			// register as 'classnames', consistent with npm package name
+			!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
+				return classNames;
+			}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+		} else {
+			window.classNames = classNames;
+		}
+	}());
+
 
 /***/ }
 /******/ ]);

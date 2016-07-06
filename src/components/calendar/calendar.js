@@ -14,8 +14,7 @@ var Calendar = React.createClass({
   },
   getDefaultProps: function() {
     return {
-      fullHeight: 46,
-      halfHeight: 23
+      height: 46
     }
   },
   componentWillMount: function() {
@@ -36,15 +35,23 @@ var Calendar = React.createClass({
     this.props.events.forEach((event) => { 
       var start = moment(event.startDate);
       var end = moment(event.endDate);
+      var duration = end.diff(start, 'minutes');
       var date = start.format('ddd M/D');
+      var hour = start.format('HH');
 
-        events[date] = { 
+        if (!events[date]) {
+          events[date] = [];
+        }
+
+        events[date].push({ 
         title: event.name,
         date,
         startTime: start.format('HH:mmA'),
         endTime: end.format('HH:mmA'),
-        duration: end.diff(start, 'minutes')
-      }; 
+        duration,
+        height: ((duration / 30) * (this.props.height / 2)),
+        top: (hour * this.props.height)
+      }); 
     });
 
     this.setState({
@@ -53,7 +60,6 @@ var Calendar = React.createClass({
     });
   },
   render: function() { 
-    // console.log(this.state.days, this.props);
     return (
       <table className={styles.calendar}>
         <thead className={styles.header}>
@@ -63,11 +69,17 @@ var Calendar = React.createClass({
         </thead>
         <tbody className={styles.body}>
           <tr>
-            <td className={styles.hours}>{this.props.hours.map((hour, i) => <div className={styles.hour} key={i}>{hour}</div>)}</td>
+            <td className={styles.hours}>{this.state.hours.map((hour, i) => <div className={styles.hour} key={i}>{hour}</div>)}</td>
             {this.state.days.map((day, i) => {
+              var events = this.state.events[day];
+
               return (
                 <td className={styles.day} key={i}>
-                  <Event top={day.top + 'px'} height={46 + 'px'} />
+                  { 
+                    events && events.map((event, i) => {
+                      return <Event key={i} {...event} />
+                    })
+                  }
                 </td>
               );
             })}
