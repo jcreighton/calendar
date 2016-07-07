@@ -88,9 +88,17 @@
 	        startDate: '2016-07-07T06:30:00.000Z',
 	        endDate: '2016-07-07T18:00:00.000Z'
 	      }, {
+	        name: 'still binge watching OINTB',
+	        startDate: '2016-07-08T08:30:00.000Z',
+	        endDate: '2016-07-08T20:30:00.000Z'
+	      }, {
 	        name: 'stand in line at Shake Shack',
 	        startDate: '2016-07-04T13:00:00.000Z',
 	        endDate: '2016-07-04T13:30:00.000Z'
+	      }, {
+	        name: 'coffee o\' clock',
+	        startDate: '2016-07-09T08:00:00.000Z',
+	        endDate: '2016-07-09T12:30:00.000Z'
 	      }, {
 	        name: '#blessed',
 	        startDate: '2016-07-09T09:00:00.000Z',
@@ -20843,10 +20851,11 @@
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 	var moment = __webpack_require__(171);
+	__webpack_require__(275);
 	var React = __webpack_require__(2);
 
-	var Event = __webpack_require__(275);
-	var styles = __webpack_require__(281);
+	var Event = __webpack_require__(276);
+	var styles = __webpack_require__(282);
 
 	var Calendar = React.createClass({
 	  displayName: 'Calendar',
@@ -20879,9 +20888,10 @@
 	    // Munge events
 	    var events = {};
 	    this.props.events.forEach(function (event) {
-	      var start = moment(event.startDate);
-	      var end = moment(event.endDate);
-	      var duration = end.diff(start, 'minutes');
+	      var start = moment.utc(event.startDate);
+	      var end = moment.utc(event.endDate);
+	      var range = moment.range(event.startDate, event.endDate);
+	      var duration = range.diff('minutes');
 	      var date = start.format('ddd M/D');
 
 	      // Determine height based on duration of event
@@ -20892,19 +20902,35 @@
 	      var minutes = start.format('mm') === '30' ? .5 : 0;
 	      var top = (hour + minutes) * _this.props.height;
 
+	      var newEvent = {
+	        startDate: event.startDate,
+	        endDate: event.endDate,
+	        title: event.name,
+	        start: start.format('h:mma'),
+	        end: end.format('h:mma'),
+	        duration: duration,
+	        height: height,
+	        top: top
+	      };
+
 	      if (!events[date]) {
 	        events[date] = [];
 	      }
 
-	      events[date].push({
-	        title: event.name,
-	        date: date,
-	        start: start.format('H:mma'),
-	        end: end.format('H:mma'),
-	        duration: duration,
-	        height: height,
-	        top: top
-	      });
+	      // Loop through previous to decide of there's overlapping
+	      if (events[date].length) {
+	        events[date].forEach(function (event) {
+	          var previousRange = moment.range(event.startDate, event.endDate);
+	          var isOverlapping = previousRange.overlaps(range);
+	          if (isOverlapping) {
+	            event.width = 80;
+	            newEvent.width = 80;
+	            newEvent.left = 92;
+	          }
+	        });
+	      }
+
+	      events[date].push(newEvent);
 	    });
 
 	    this.setState({
@@ -35021,13 +35047,417 @@
 /* 275 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;(function (root, factory) {
+	  if (true) {
+	    // AMD. Register as an anonymous module unless amdModuleId is set
+	    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(171)], __WEBPACK_AMD_DEFINE_RESULT__ = function (a0) {
+	      return (root['DateRange'] = factory(a0));
+	    }.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	  } else if (typeof exports === 'object') {
+	    // Node. Does not work with strict CommonJS, but
+	    // only CommonJS-like environments that support module.exports,
+	    // like Node.
+	    module.exports = factory(require("moment"));
+	  } else {
+	    root['DateRange'] = factory(moment);
+	  }
+	}(this, function (moment) {
+
+	//-----------------------------------------------------------------------------
+	// Contstants
+	//-----------------------------------------------------------------------------
+
+
+
+	var INTERVALS = {
+	  year:   true,
+	  month:  true,
+	  week:   true,
+	  day:    true,
+	  hour:   true,
+	  minute: true,
+	  second: true
+	};
+
+
+	//-----------------------------------------------------------------------------
+	// Date Ranges
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * DateRange class to store ranges and query dates.
+	 *
+	 * @constructor
+	 * @param {(Moment|Date)} start Start of interval
+	 * @param {(Moment|Date)} end End of interval
+	 *//**
+	 * DateRange class to store ranges and query dates.
+	 *
+	 * @constructor
+	 * @param {!Array} range Array containing start and end dates.
+	 *//**
+	 * DateRange class to store ranges and query dates.
+	 *
+	 * @constructor
+	 * @param {!String} range String formatted as an IS0 8601 time interval
+	 */
+	function DateRange(start, end) {
+	  var parts;
+	  var s = start;
+	  var e = end;
+
+	  if (arguments.length === 1 || end === undefined) {
+	    if (typeof start === 'object' && start.length === 2) {
+	      s = start[0];
+	      e = start[1];
+	    }
+	    else if (typeof start === 'string') {
+	      parts = start.split('/');
+	      s = parts[0];
+	      e = parts[1];
+	    }
+	  }
+
+	  this.start = (s === null) ? moment(-8640000000000000) : moment(s);
+	  this.end   = (e === null) ? moment(8640000000000000) : moment(e);
+	}
+
+	/**
+	 * Constructor for prototype.
+	 *
+	 * @type {DateRange}
+	 */
+	DateRange.prototype.constructor = DateRange;
+
+	/**
+	 * Deep clone range.
+	 *
+	 * @return {!DateRange}
+	 */
+	DateRange.prototype.clone = function() {
+	  return moment().range(this.start, this.end);
+	};
+
+	/**
+	 * Determine if the current interval contains a given moment/date/range.
+	 *
+	 * @param {(Moment|Date|DateRange)} other Date to check
+	 * @param {!boolean} exclusive True if the to value is exclusive
+	 *
+	 * @return {!boolean}
+	 */
+	DateRange.prototype.contains = function(other, exclusive) {
+	  var start = this.start;
+	  var end   = this.end;
+
+	  if (other instanceof DateRange) {
+	    return start <= other.start && (end > other.end || (end.isSame(other.end) && !exclusive));
+	  }
+	  else {
+	    return start <= other && (end > other || (end.isSame(other) && !exclusive));
+	  }
+	};
+
+	/**
+	 * Determine if the current date range overlaps a given date range.
+	 *
+	 * @param {!DateRange} range Date range to check
+	 *
+	 * @return {!boolean}
+	 */
+	DateRange.prototype.overlaps = function(range) {
+	  return this.intersect(range) !== null;
+	};
+
+	/**
+	 * Determine the intersecting periods from one or more date ranges.
+	 *
+	 * @param {!DateRange} other A date range to intersect with this one
+	 *
+	 * @return {DateRange} Returns the intersecting date or `null` if the ranges do
+	 *                     not intersect
+	 */
+	DateRange.prototype.intersect = function(other) {
+	  var start = this.start;
+	  var end   = this.end;
+
+	  if ((start <= other.start) && (other.start < end) && (end < other.end)) {
+	    return new DateRange(other.start, end);
+	  }
+	  else if ((other.start < start) && (start < other.end) && (other.end <= end)) {
+	    return new DateRange(start, other.end);
+	  }
+	  else if ((other.start < start) && (start <= end) && (end < other.end)) {
+	    return this;
+	  }
+	  else if ((start <= other.start) && (other.start <= other.end) && (other.end <= end)) {
+	    return other;
+	  }
+
+	  return null;
+	};
+
+	/**
+	 * Merge date ranges if they intersect.
+	 *
+	 * @param {!DateRange} other A date range to add to this one
+	 *
+	 * @return {DateRange} Returns the new `DateRange` or `null` if they do not
+	 *                     overlap
+	 */
+	DateRange.prototype.add = function(other) {
+	  if (this.overlaps(other)) {
+	    return new DateRange(moment.min(this.start, other.start), moment.max(this.end, other.end));
+	  }
+
+	  return null;
+	};
+
+	/**
+	 * Subtract one range from another.
+	 *
+	 * @param {!DateRange} other A date range to substract from this one
+	 *
+	 * @return {!Array<DateRange>}
+	 */
+	DateRange.prototype.subtract = function(other) {
+	  var start = this.start;
+	  var end   = this.end;
+
+	  if (this.intersect(other) === null) {
+	    return [this];
+	  }
+	  else if ((other.start <= start) && (start < end) && (end <= other.end)) {
+	    return [];
+	  }
+	  else if ((other.start <= start) && (start < other.end) && (other.end < end)) {
+	    return [new DateRange(other.end, end)];
+	  }
+	  else if ((start < other.start) && (other.start < end) && (end <= other.end)) {
+	    return [new DateRange(start, other.start)];
+	  }
+	  else if ((start < other.start) && (other.start < other.end) && (other.end < end)) {
+	    return [new DateRange(start, other.start), new DateRange(other.end, end)];
+	  }
+	  else if ((start < other.start) && (other.start < end) && (other.end < end)) {
+	    return [new DateRange(start, other.start), new DateRange(other.start, end)];
+	  }
+	};
+
+	/**
+	 * Build a n array of dates.
+	 *
+	 * @param {(!DateRange|String)} range Date range to be used for iteration or
+	 *                                    shorthand string (shorthands:
+	 *                                    http://momentjs.com/docs/#/manipulating/add/)
+	 * @param {!boolean} exclusive Indicate that the end of the range should not
+	 *                             be included in the iter.
+	 *
+	 * @return {!Array}
+	 */
+	DateRange.prototype.toArray = function(by, exclusive) {
+	  var acc = [];
+	  this.by(by, function(unit) {
+	    acc.push(unit);
+	  }, exclusive);
+	  return acc;
+	};
+
+	/**
+	 * Iterate over the date range by a given date range, executing a function
+	 * for each sub-range.
+	 *
+	 * @param {(!DateRange|String)} range Date range to be used for iteration or
+	 *                                    shorthand string (shorthands:
+	 *                                    http://momentjs.com/docs/#/manipulating/add/)
+	 * @param {!DateRange~by} hollaback Callback
+	 * @param {!boolean} exclusive Indicate that the end of the range should not
+	 *                             be included in the iter.
+	 *
+	 * @return {DateRange} `this`
+	 */
+	DateRange.prototype.by = function(range, hollaback, exclusive) {
+	  if (typeof range === 'string') {
+	    _byString.call(this, range, hollaback, exclusive);
+	  }
+	  else {
+	    _byRange.call(this, range, hollaback, exclusive);
+	  }
+	  return this;
+	};
+
+
+	/**
+	 * Callback executed for each sub-range.
+	 *
+	 * @callback DateRange~by
+	 *
+	 * @param {!Moment} current Current moment object for iteration
+	 */
+
+	/**
+	 * @private
+	 */
+	function _byString(interval, hollaback, exclusive) {
+	  var current = moment(this.start);
+
+	  while (this.contains(current, exclusive)) {
+	    hollaback.call(this, current.clone());
+	    current.add(1, interval);
+	  }
+	}
+
+	/**
+	 * @private
+	 */
+	function _byRange(interval, hollaback, exclusive) {
+	  var div = this / interval;
+	  var l = Math.floor(div);
+
+	  if (l === Infinity) { return; }
+	  if (l === div && exclusive) {
+	    l--;
+	  }
+
+	  for (var i = 0; i <= l; i++) {
+	    hollaback.call(this, moment(this.start.valueOf() + interval.valueOf() * i));
+	  }
+	}
+
+	/**
+	 * Date range formatted as an [ISO8601 Time
+	 * Interval](http://en.wikipedia.org/wiki/ISO_8601#Time_intervals).
+	 *
+	 * @return {!String}
+	 */
+	DateRange.prototype.toString = function() {
+	  return this.start.format() + '/' + this.end.format();
+	};
+
+	/**
+	 * Date range in milliseconds. Allows basic coercion math of date ranges.
+	 *
+	 * @return {!number}
+	 */
+	DateRange.prototype.valueOf = function() {
+	  return this.end - this.start;
+	};
+
+	/**
+	 * Center date of the range.
+	 *
+	 * @return {!Moment}
+	 */
+	DateRange.prototype.center = function() {
+	  var center = this.start + this.diff() / 2;
+	  return moment(center);
+	};
+
+	/**
+	 * Date range toDate
+	 *
+	 * @return {!Array<Date>}
+	 */
+	DateRange.prototype.toDate = function() {
+	  return [this.start.toDate(), this.end.toDate()];
+	};
+
+	/**
+	 * Determine if this date range is the same as another.
+	 *
+	 * @param {!DateRange} other Another date range to compare to
+	 *
+	 * @return {!boolean}
+	 */
+	DateRange.prototype.isSame = function(other) {
+	  return this.start.isSame(other.start) && this.end.isSame(other.end);
+	};
+
+	/**
+	 * The difference of the end vs start.
+	 *
+	 * @param {number} unit Unit of difference, if no unit is passed in
+	 *                      milliseconds are returned. E.g.: `"days"`, `"months"`,
+	 *                      etc...
+	 *
+	 * @return {!number}
+	 */
+	DateRange.prototype.diff = function(unit) {
+	  return this.end.diff(this.start, unit);
+	};
+
+
+	//-----------------------------------------------------------------------------
+	// Moment Extensions
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Build a date range.
+	 *
+	 * @param {(Moment|Date)} start Start of range
+	 * @param {(Moment|Date)} end End of range
+	 *
+	 * @this {Moment}
+	 *
+	 * @return {!DateRange}
+	 */
+	moment.range = function(start, end) {
+	  if (start in INTERVALS) {
+	    return new DateRange(moment(this).startOf(start), moment(this).endOf(start));
+	  }
+	  else {
+	    return new DateRange(start, end);
+	  }
+	};
+
+	/**
+	 * Expose constructor
+	 *
+	 * @const
+	 */
+	moment.range.constructor = DateRange;
+
+	/**
+	 * @deprecated
+	 */
+	moment.fn.range = moment.range;
+
+	/**
+	 * Check if the current moment is within a given date range.
+	 *
+	 * @param {!DateRange} range Date range to check
+	 *
+	 * @this {Moment}
+	 *
+	 * @return {!boolean}
+	 */
+	moment.fn.within = function(range) {
+	  return range.contains(this._d);
+	};
+
+
+	//-----------------------------------------------------------------------------
+	// Export
+	//-----------------------------------------------------------------------------
+
+
+
+	return DateRange;
+
+	}));
+
+
+/***/ },
+/* 276 */
+/***/ function(module, exports, __webpack_require__) {
+
 	'use strict';
 
 	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 	var React = __webpack_require__(2);
-	var classnames = __webpack_require__(276);
-	var styles = __webpack_require__(277);
+	var classnames = __webpack_require__(277);
+	var styles = __webpack_require__(278);
 
 	var Calendar = React.createClass({
 	  displayName: 'Calendar',
@@ -35084,7 +35514,7 @@
 	module.exports = Calendar;
 
 /***/ },
-/* 276 */
+/* 277 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -35138,16 +35568,16 @@
 
 
 /***/ },
-/* 277 */
+/* 278 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(278);
+	var content = __webpack_require__(279);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(280)(content, {});
+	var update = __webpack_require__(281)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -35164,10 +35594,10 @@
 	}
 
 /***/ },
-/* 278 */
+/* 279 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(279)();
+	exports = module.exports = __webpack_require__(280)();
 	// imports
 
 
@@ -35183,7 +35613,7 @@
 	};
 
 /***/ },
-/* 279 */
+/* 280 */
 /***/ function(module, exports) {
 
 	/*
@@ -35239,7 +35669,7 @@
 
 
 /***/ },
-/* 280 */
+/* 281 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -35491,16 +35921,16 @@
 
 
 /***/ },
-/* 281 */
+/* 282 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(282);
+	var content = __webpack_require__(283);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(280)(content, {});
+	var update = __webpack_require__(281)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -35517,10 +35947,10 @@
 	}
 
 /***/ },
-/* 282 */
+/* 283 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(279)();
+	exports = module.exports = __webpack_require__(280)();
 	// imports
 
 

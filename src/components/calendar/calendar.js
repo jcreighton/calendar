@@ -34,9 +34,10 @@ var Calendar = React.createClass({
     // Munge events
     var events = {};
     this.props.events.forEach((event) => { 
-      var start = moment(event.startDate);
-      var end = moment(event.endDate);
-      var duration = end.diff(start, 'minutes');
+      var start = moment.utc(event.startDate);
+      var end = moment.utc(event.endDate);
+      var range = moment.range(event.startDate, event.endDate);
+      var duration = range.diff('minutes');
       var date = start.format('ddd M/D');
 
       // Determine height based on duration of event
@@ -47,19 +48,35 @@ var Calendar = React.createClass({
       var minutes = start.format('mm') === '30' ? .5 : 0;
       var top = (hour + minutes) * this.props.height;
 
+      var newEvent = { 
+        startDate: event.startDate,
+        endDate: event.endDate,
+        title: event.name,
+        start: start.format('h:mma'),
+        end: end.format('h:mma'),
+        duration,
+        height,
+        top
+      };
+
       if (!events[date]) {
         events[date] = [];
       }
 
-      events[date].push({ 
-        title: event.name,
-        date,
-        start: start.format('H:mma'),
-        end: end.format('H:mma'),
-        duration,
-        height,
-        top
-      }); 
+      // Loop through previous to decide of there's overlapping
+      if (events[date].length) {
+        events[date].forEach((event) => {
+          let previousRange = moment.range(event.startDate, event.endDate);
+          let isOverlapping = previousRange.overlaps(range);
+          if (isOverlapping) {
+            event.width = 80;
+            newEvent.width = 80;
+            newEvent.left = 92;
+          }
+        });
+      }
+
+      events[date].push(newEvent); 
     });
 
     this.setState({

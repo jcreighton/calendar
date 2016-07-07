@@ -38,9 +38,19 @@ var App = React.createClass({
           endDate: '2016-07-07T18:00:00.000Z'
         },
         {
+          name: 'still binge watching OINTB',
+          startDate: '2016-07-08T08:30:00.000Z',
+          endDate: '2016-07-08T20:30:00.000Z'
+        },
+        {
           name: 'stand in line at Shake Shack',
           startDate: '2016-07-04T13:00:00.000Z',
           endDate: '2016-07-04T13:30:00.000Z'
+        },
+        {
+          name: 'coffee o\' clock',
+          startDate: '2016-07-09T08:00:00.000Z',
+          endDate: '2016-07-09T12:30:00.000Z'
         },
         {
           name: '#blessed',

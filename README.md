@@ -1,8 +1,14 @@
-# calendar
+## Architecture
+- React
+- CSS Modules
+- Karma + Mocha + Expect
+- moment
+- moment-range (https://github.com/gf3/moment-range)
+
+
+## Instructions
+- npm install
+- npm run start
 
 // Break up into smaller components
-// Data munge events
-// Determine length of event in 30 min increments
-// Determine height
-// Determine position based on start time
 // How to handle overlapping events?
