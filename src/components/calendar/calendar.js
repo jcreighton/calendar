@@ -2,17 +2,11 @@ var moment = require('moment');
 require('moment-range');
 var React = require('react');
 
-var Event = require('../event/event');
+var Header = require('../header/header');
+var Week = require('../week/week');
 var styles = require('./calendar.css');
 
 var Calendar = React.createClass({
-  getInitialState: function() {
-    return {
-      hours: ['12am', '1am', '2am', '3am', '4am', '5am', '6am', '7am', '8am', '9am', '10am', '11am',
-        '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm', '9pm', '10pm', '11pm'
-      ]
-    }
-  },
   getDefaultProps: function() {
     return {
       height: 46
@@ -59,11 +53,13 @@ var Calendar = React.createClass({
         top
       };
 
+
       if (!events[date]) {
         events[date] = [];
       }
 
       // Loop through previous to decide of there's overlapping
+      // If overlap is found, adjust width for both events & left position for 2nd event
       if (events[date].length) {
         events[date].forEach((event) => {
           let previousRange = moment.range(event.startDate, event.endDate);
@@ -85,30 +81,13 @@ var Calendar = React.createClass({
     });
   },
   render: function() { 
+    var { days, events } = this.state;
+
     return (
       <table className={styles.calendar}>
-        <thead className={styles.header}>
-          <tr>
-            {this.state.days.map((day, i) => <th key={i}>{day}</th>)}
-          </tr>
-        </thead>
+        <Header days={days} />
         <tbody className={styles.body}>
-          <tr>
-            <td className={styles.hours}>{this.state.hours.map((hour, i) => <div className={styles.hour} key={i}>{hour}</div>)}</td>
-            {this.state.days.map((day, i) => {
-              var events = this.state.events[day];
-
-              return (
-                <td className={styles.day} key={i}>
-                  { 
-                    events && events.map((event, i) => {
-                      return <Event key={i} {...event} />
-                    })
-                  }
-                </td>
-              );
-            })}
-          </tr>
+          <Week days={days} events={events} />
         </tbody>
       </table>
     );

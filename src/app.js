@@ -60,9 +60,6 @@ var App = React.createClass({
       ]
     }
   },
-  componentDidMount: function() {
-    // Make fake API call
-  },
   render: function() { 
     return (
       <div className='app'>

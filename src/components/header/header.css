@@ -1,0 +1,14 @@
+.header tr {
+  display: flex;
+  margin-top: 8px;
+  margin-left: 84px;
+  margin-bottom: 8px;
+}
+
+.header th {
+  flex: 0 0 180px;
+  font-size: 16px;
+  color: #535354;
+  text-align: center;
+  border: 2px solid white;
+}

@@ -1,0 +1,27 @@
+.week {
+  display: flex;
+}
+
+.hours {
+  display: flex;
+  flex-direction: column;
+  color: #535354;
+  border-right: 4px solid white;
+}
+
+.hour {
+  width: 80px;
+  height: 40px;
+  font-size: 12px;
+  text-align: end;
+  margin-bottom: 4px;
+  border-bottom: 2px solid #ff6347;
+}
+
+.hour:first-child {
+  margin-top: 4px;
+}
+
+.hour:last-child {
+  margin-bottom: 0px;
+}

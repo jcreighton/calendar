@@ -10,5 +10,8 @@
 - npm install
 - npm run start
 
+
+## Notes
+- Overlapping events 
+
 // Break up into smaller components
-// How to handle overlapping events?

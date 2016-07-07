@@ -1,0 +1,8 @@
+.day {
+  position: relative;
+  flex: 0 0 180px;
+  background-color: #eeeeee;
+  background-image: linear-gradient(transparent 50%, rgba(255, 255, 255, .5) 50%);
+  background-size: 46px 46px;
+  border-right: 4px solid white;
+}
